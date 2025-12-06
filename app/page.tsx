@@ -130,24 +130,24 @@ export default function CampaignForm() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold mb-8 text-center">Lead Management System</h1>
+    <div>
+      <div>
+        <h1>Lead Management System</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
           {/* Form Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-6">Create New Lead</h2>
+          <div>
+            <h2>Create New Lead</h2>
 
             {message && (
-              <div className={`mb-6 p-3 rounded ${message.includes("berhasil") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+              <div>
                 {message}
               </div>
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
+              <div>
+                <label htmlFor="name">
                   Name *
                 </label>
                 <input
@@ -156,14 +156,13 @@ export default function CampaignForm() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter full name"
                   required
                 />
               </div>
 
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
+              <div>
+                <label htmlFor="email">
                   Email *
                 </label>
                 <input
@@ -172,14 +171,13 @@ export default function CampaignForm() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter email address"
                   required
                 />
               </div>
 
-              <div className="mb-6">
-                <label htmlFor="campaignId" className="block text-sm font-medium mb-2">
+              <div>
+                <label htmlFor="campaignId">
                   Campaign ID *
                 </label>
                 <input
@@ -188,7 +186,6 @@ export default function CampaignForm() {
                   name="campaignId"
                   value={formData.campaignId}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter campaign ID"
                   required
                 />
@@ -197,7 +194,6 @@ export default function CampaignForm() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-blue-300 transition duration-200 font-medium"
               >
                 {isLoading ? "Creating..." : "Create Lead"}
               </button>
@@ -205,68 +201,67 @@ export default function CampaignForm() {
           </div>
 
           {/* Leads Table Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Leads List</h2>
+          <div>
+            <div>
+              <h2>Leads List</h2>
               <button
                 onClick={fetchLeads}
                 disabled={isLoadingLeads}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition duration-200 text-sm font-medium"
               >
                 {isLoadingLeads ? "Refreshing..." : "Refresh"}
               </button>
             </div>
 
             {isLoadingLeads ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-2 text-gray-600">Loading leads...</p>
+              <div>
+                <div></div>
+                <p>Loading leads...</p>
               </div>
             ) : leads.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div>
                 No leads found. Create your first lead!
               </div>
             ) : (
               <>
-                <div className="overflow-x-auto rounded-lg border border-gray-200">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div>
+                  <table>
+                    <thead>
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           No
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Name
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Email
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Campaign ID
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Created At
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody>
                       {currentLeads.map((lead, index) => (
-                        <tr key={lead.id} className="hover:bg-gray-50 transition duration-150">
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                        <tr>
+                          <td>
                             {startIndex + index + 1}
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                          <td>
                             {lead.name}
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                          <td>
                             {lead.email}
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                          <td>
+                            <span>
                               {lead.campaignId}
                             </span>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                          <td>
                             {formatDate(lead.createdAt)}
                           </td>
                         </tr>
@@ -277,18 +272,17 @@ export default function CampaignForm() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-6 px-4">
-                    <div className="text-sm text-gray-700">
+                  <div>
+                    <div>
                       Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-                      <span className="font-medium">{Math.min(endIndex, leads.length)}</span> of{" "}
-                      <span className="font-medium">{leads.length}</span> leads
+                      <span>{Math.min(endIndex, leads.length)}</span> of{" "}
+                      <span>{leads.length}</span> leads
                     </div>
                     
-                    <div className="flex space-x-2">
+                    <div>
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
                         Previous
                       </button>
@@ -305,7 +299,6 @@ export default function CampaignForm() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
                         Next
                       </button>
@@ -318,14 +311,14 @@ export default function CampaignForm() {
         </div>
 
         {/* Stats Card */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-sm font-medium text-gray-500">Total Leads</h3>
-            <p className="text-2xl font-bold mt-2">{leads.length}</p>
+        <div>
+          <div>
+            <h3>Total Leads</h3>
+            <p>{leads.length}</p>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-sm font-medium text-gray-500">Current Page</h3>
-            <p className="text-2xl font-bold mt-2">{currentPage} / {totalPages}</p>
+          <div>
+            <h3>Current Page</h3>
+            <p>{currentPage} / {totalPages}</p>
           </div>
           {/* <div className="bg-white p-4 rounded-lg shadow-md">
             <h3 className="text-sm font-medium text-gray-500">Items Per Page</h3>
