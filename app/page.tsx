@@ -2,6 +2,7 @@
 
 "use client";
 import { useState, useEffect } from "react";
+import { text } from "stream/consumers";
 
 interface Lead {
   id: string;
@@ -19,6 +20,9 @@ export default function CampaignForm() {
     email: "",
     campaignId: "",
   });
+  const [formWord, setFormWord] = useState({
+    word: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -28,6 +32,9 @@ export default function CampaignForm() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 5;
+
+  const [word, setWord] = useState("");
+  const [resultSentiment, setResultSentiment] = useState("");
 
   // Fetch leads data
   const fetchLeads = async () => {
@@ -70,13 +77,21 @@ export default function CampaignForm() {
     }));
   };
 
+  const handleChangeWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormWord((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:3001/Leads/createLeads", {
+      const response = await fetch("http://localhost:3001/leads/createLeads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,6 +113,49 @@ export default function CampaignForm() {
       } else {
         setMessage(`Error: ${data.message || "Gagal membuat lead"}`);
       }
+    } catch (error) {
+      setMessage("Terjadi kesalahan jaringan");
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const analyzeWord = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setWord("");
+    const requestData = {
+      text: formWord.word
+    }
+    try {
+      const response = await fetch("http://localhost:3001/leads/checkWord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+      
+      let result = ''
+      let status = 0
+      await response.json().then((data) => {
+        console.log('data ', data)
+        status = data.status
+        result = data.data.sentiment
+
+        if (status === 200) {
+          result = data.data.sentiment
+          // console.log('result ', result)  
+          setResultSentiment(result)
+          setFormWord({
+            word: "",
+          })
+        } else {
+          setResultSentiment(`Error: Gagal Analisa kata-kata`)
+        }
+      });
+
     } catch (error) {
       setMessage("Terjadi kesalahan jaringan");
       console.error("Error:", error);
@@ -324,6 +382,33 @@ export default function CampaignForm() {
             <h3 className="text-sm font-medium text-gray-500">Items Per Page</h3>
             <p className="text-2xl font-bold mt-2">{itemsPerPage}</p>
           </div> */}
+        </div>
+
+        <div>
+          <h1>Analyze Word</h1>
+          <form onSubmit={analyzeWord}>
+              <div>
+                <label htmlFor="word">
+                  Input Word *
+                </label>
+                <input
+                  type="text"
+                  id="word"
+                  name="word"
+                  value={formWord.word}
+                  onChange={handleChangeWord}
+                  placeholder="Enter Word"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Analyzing..." : "Analyze Word"}
+              </button>
+              <h3>{resultSentiment}</h3>
+            </form>
         </div>
       </div>
     </div>
