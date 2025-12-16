@@ -3,6 +3,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { text } from "stream/consumers";
+import "tailwindcss";
 
 interface Lead {
   id: string;
@@ -49,7 +50,7 @@ export default function CampaignForm() {
       console.log('response ', response)
       const data = await response.json();
       console.log('data ', data)
-      
+
       if (data.status === 200) {
         console.log('response oke ')
         setLeads(data.data);
@@ -136,9 +137,11 @@ export default function CampaignForm() {
         },
         body: JSON.stringify(requestData),
       });
-      
+
       let result = ''
       let status = 0
+      let result2 = await response.json()
+      console.log('result2 ', result2.data)
       await response.json().then((data) => {
         console.log('data ', data)
         status = data.status
@@ -188,228 +191,227 @@ export default function CampaignForm() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col flex justify-evenly">
+      <h1>Lead Management System</h1>
+
       <div>
-        <h1>Lead Management System</h1>
-        
+        {/* Form Section */}
         <div>
-          {/* Form Section */}
-          <div>
-            <h2>Create New Lead</h2>
+          <h2>Create New Lead</h2>
 
-            {message && (
-              <div>
-                {message}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="name">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter full name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter email address"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="campaignId">
-                  Campaign ID *
-                </label>
-                <input
-                  type="text"
-                  id="campaignId"
-                  name="campaignId"
-                  value={formData.campaignId}
-                  onChange={handleChange}
-                  placeholder="Enter campaign ID"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating..." : "Create Lead"}
-              </button>
-            </form>
-          </div>
-
-          {/* Leads Table Section */}
-          <div>
+          {message && (
             <div>
-              <h2>Leads List</h2>
-              <button
-                onClick={fetchLeads}
-                disabled={isLoadingLeads}
-              >
-                {isLoadingLeads ? "Refreshing..." : "Refresh"}
-              </button>
+              {message}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="border-4 border-indigo-500/100">
+              <label htmlFor="name">
+                Name *
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter full name"
+                required
+              />
             </div>
 
-            {isLoadingLeads ? (
-              <div>
-                <div></div>
-                <p>Loading leads...</p>
-              </div>
-            ) : leads.length === 0 ? (
-              <div>
-                No leads found. Create your first lead!
-              </div>
-            ) : (
-              <>
-                <div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>
-                          No
-                        </th>
-                        <th>
-                          Name
-                        </th>
-                        <th>
-                          Email
-                        </th>
-                        <th>
-                          Campaign ID
-                        </th>
-                        <th>
-                          Created At
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentLeads.map((lead, index) => (
-                        <tr>
-                          <td>
-                            {startIndex + index + 1}
-                          </td>
-                          <td>
-                            {lead.name}
-                          </td>
-                          <td>
-                            {lead.email}
-                          </td>
-                          <td>
-                            <span>
-                              {lead.campaignId}
-                            </span>
-                          </td>
-                          <td>
-                            {formatDate(lead.createdAt)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+            <div>
+              <label htmlFor="email">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter email address"
+                required
+              />
+            </div>
 
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div>
-                    <div>
-                      Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-                      <span>{Math.min(endIndex, leads.length)}</span> of{" "}
-                      <span>{leads.length}</span> leads
-                    </div>
-                    
-                    <div>
-                      <button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                      >
-                        Previous
-                      </button>
-                      
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <button
-                          key={page}
-                          onClick={() => handlePageChange(page)}
-                        >
-                          {page}
-                        </button>
-                      ))}
-                      
-                      <button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+            <div>
+              <label htmlFor="campaignId">
+                Campaign ID *
+              </label>
+              <input
+                type="text"
+                id="campaignId"
+                name="campaignId"
+                value={formData.campaignId}
+                onChange={handleChange}
+                placeholder="Enter campaign ID"
+                required
+              />
+            </div>
+
+            <button
+              className="bg-indigo-500 hover:bg-fuchsia-500 rounded-md p-1 mt-2 mb-2"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating..." : "Create Lead"}
+            </button>
+          </form>
         </div>
 
-        {/* Stats Card */}
+        {/* Leads Table Section */}
         <div>
-          <div>
-            <h3>Total Leads</h3>
-            <p>{leads.length}</p>
+          <div className="mb-3">
+            <h2>Leads List</h2>
+            <button
+              onClick={fetchLeads}
+              disabled={isLoadingLeads}
+            >
+              {isLoadingLeads ? "Refreshing..." : "Refresh"}
+            </button>
           </div>
-          <div>
-            <h3>Current Page</h3>
-            <p>{currentPage} / {totalPages}</p>
-          </div>
-          {/* <div className="bg-white p-4 rounded-lg shadow-md">
+
+          {isLoadingLeads ? (
+            <div>
+              <div></div>
+              <p>Loading leads...</p>
+            </div>
+          ) : leads.length === 0 ? (
+            <div>
+              No leads found. Create your first lead!
+            </div>
+          ) : (
+            <>
+              <div className="mb-3">
+                <table className="border-separate border-spacing-1 border border-gray-400 dark:border-gray-500">
+                  <thead>
+                    <tr>
+                      <th className="border border-gray-300 ...">
+                        No
+                      </th>
+                      <th className="border border-gray-300 ...">
+                        Name
+                      </th>
+                      <th className="border border-gray-300 ...">
+                        Email
+                      </th>
+                      <th className="border border-gray-300 ...">
+                        Campaign ID
+                      </th>
+                      <th className="border border-gray-300 ...">
+                        Created At
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentLeads.map((lead, index) => (
+                      <tr>
+                        <td className="border border-gray-300 ...">
+                          {startIndex + index + 1}
+                        </td>
+                        <td className="border border-gray-300 ...">
+                          {lead.name}
+                        </td>
+                        <td className="border border-gray-300 ...">
+                          {lead.email}
+                        </td>
+                        <td className="border border-gray-300 ...">
+                          <span>
+                            {lead.campaignId}
+                          </span>
+                        </td>
+                        <td className="border border-gray-300 ...">
+                          {formatDate(lead.createdAt)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div>
+                  <div>
+                    Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
+                    <span>{Math.min(endIndex, leads.length)}</span> of{" "}
+                    <span>{leads.length}</span> leads
+                  </div>
+
+                  <div>
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Stats Card */}
+      <div>
+        <div>
+          <h3>Total Leads</h3>
+          <p>{leads.length}</p>
+        </div>
+        <div>
+          <h3>Current Page</h3>
+          <p>{currentPage} / {totalPages}</p>
+        </div>
+        {/* <div className="bg-white p-4 rounded-lg shadow-md">
             <h3 className="text-sm font-medium text-gray-500">Items Per Page</h3>
             <p className="text-2xl font-bold mt-2">{itemsPerPage}</p>
           </div> */}
-        </div>
+      </div>
 
-        <div>
-          <h1>Analyze Word</h1>
-          <form onSubmit={analyzeWord}>
-              <div>
-                <label htmlFor="word">
-                  Input Word *
-                </label>
-                <input
-                  type="text"
-                  id="word"
-                  name="word"
-                  value={formWord.word}
-                  onChange={handleChangeWord}
-                  placeholder="Enter Word"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? "Analyzing..." : "Analyze Word"}
-              </button>
-              <h3>{resultSentiment}</h3>
-            </form>
-        </div>
+      <div>
+        <h1>Analyze Word</h1>
+        <form onSubmit={analyzeWord}>
+          <div>
+            <label htmlFor="word">
+              Input Word *
+            </label>
+            <input
+              type="text"
+              id="word"
+              name="word"
+              value={formWord.word}
+              onChange={handleChangeWord}
+              placeholder="Enter Word"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Analyzing..." : "Analyze Word"}
+          </button>
+          <h3>{resultSentiment}</h3>
+        </form>
       </div>
     </div>
   );
